@@ -1,0 +1,477 @@
+:root{
+    --primary:#ED5A61;
+    --seconday: #80288A;
+}
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;;
+}
+
+body,html{
+    min-height: calc(100vh);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.button{
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 51px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 28px;
+    background: transparent;
+    cursor: pointer;
+    display: inline-block;
+}
+
+/* header */
+
+.logo{
+    height: 35px;
+}
+
+header{
+    width: 95%;
+    height: 80px;
+    border-radius: 51px;
+    box-shadow: 0 3px 16px rgba(0, 0, 0, 0.25);
+    padding: 30px 50px;
+    margin: 25px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* footer */
+
+footer{
+    height: 80px;
+    width: 100%;
+    display: flex;
+    background-image: linear-gradient(to right,#5D1C74,#992961,#DE384C,#DE384C);
+    color: #ffffff;
+    bottom: 0;
+    position: relative;
+    margin-top: 25px;
+}
+
+.background-image{
+    height: 100%;
+    width: 100%;
+    background-image: url("../images/footer-background.png");
+    background-repeat: repeat;
+    background-size: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.1;
+}
+
+.copyright{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-image, .copyright{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* content */
+
+.name{
+    text-transform: capitalize;
+}
+
+.content-form{
+    margin-left: -120px;
+    min-width: 790px;
+}
+
+.form-group{
+    display: flex;
+    justify-content: center;
+}
+
+.form{
+    width: 100%;
+    max-width: 900px;
+    border-radius: 51px;
+    box-shadow: 0 3px 16px rgba(0, 0, 0, 0.25);
+    padding: 50px 45px;
+    background: #ffffff;
+}
+
+.greeting{
+    color: var(--seconday);
+}
+
+.content:before{
+    content: '';
+    background-image: url(../images/home-form-background.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 420px;
+    width: 290px;
+    margin-top: -38px;
+
+}
+
+.content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.content h3{
+    font-size: 19px;
+    padding: 15px;
+    text-align: center;
+    color: var(--primary);
+}
+
+.form p{
+    font-weight: bold;
+    padding: 0 28px;
+    color: #80288A;
+}
+
+form{
+    padding: 10px 0;
+}
+
+.text-input, select{
+    width: 75%;
+    background-color: #FAFAFA;
+    border-radius: 51px;
+    border: 1px solid #707070;
+    font-size: 18px;
+    padding: 10px 28px;
+}
+
+.text-input:focus{
+    outline: none;
+}
+
+.purple{
+    color: var(--seconday) !important;
+}
+
+.agree{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.agree .policy{
+    width: 90%;
+    line-height: 1;
+    padding: 5px 10px;
+    color: #777777;
+}
+
+.agree .policy{
+    margin-left: 15px;
+}
+
+/* dlay checkbox */
+
+.dlay-checkbox {
+    position: relative;
+  }
+  
+  .dlay-checkbox label {
+    margin-top: -3px;
+    background-color: #fff;
+    border: 1px solid var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 28px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 28px;
+  }
+  
+  .dlay-checkbox label:after {
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6px;
+    left: 7px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    transform: rotate(-45deg);
+    width: 12px;
+  }
+  
+  .dlay-checkbox input[type="checkbox"] {
+    visibility: hidden;
+  }
+  
+  .dlay-checkbox input[type="checkbox"]:checked + label {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .dlay-checkbox input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+  }
+  
+  /* id tooltip */
+
+  .id-tooltip{
+      position: relative;
+      border-radius: 50%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 25px;
+      height: 25px;
+      border: 2px solid var(--seconday);
+  }
+
+  .id-tooltip .id-tooltiptext{
+        visibility: hidden;
+        width: 280px;
+        background-color: var(--primary);
+        color: #fff;
+        border-radius: 10px;
+      
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        left: 150%;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 1;
+        padding: 20px;
+  }
+
+  .id-tooltip .id-tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent var(--primary) transparent transparent;
+  }
+
+  .id-tooltip:hover .id-tooltiptext{
+      cursor: pointer;
+      visibility: visible;
+  }
+
+  ul.errorlist{
+      list-style: none;
+      font-weight: bold;
+      color: var(--primary);
+  }
+
+  .errorlist li{
+      padding: 5px 28px;
+  }
+
+  #policy_error{
+      color: var(--primary);
+  }
+
+   /* error page */
+
+   .alt h1{
+    color: var(--seconday);
+    font-size: 66px;
+    line-height: 1;
+  }
+
+  .alt h2{
+      color: var(--primary);
+      font-size: 30px;
+      line-height: 1;
+  }
+
+  .error{
+      text-align: center;
+  }
+  .error p{
+      padding: 10px;
+  }
+  .error .button{
+      margin-top: 25px;
+  }
+
+  .alt .content-form{
+    margin-left: -80px;
+    min-width: 790px;
+}
+
+.alt:before{
+    content: '';
+    background-image: url(../images/alt-background.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 390px;
+    width: 290px;
+    margin-top: 50px;
+} 
+
+.alt img{
+    width: 100px;
+    aspect-ratio: 1;
+    margin-bottom: -50px;
+    position: relative;
+}
+
+.alt .form-group{
+    flex-direction: column;
+    align-items: center;
+}
+
+/* member */
+
+.member{
+    text-align: center;
+}
+
+.member p{
+    text-transform: capitalize;
+    padding: 10px;
+}
+
+.member .button{
+    margin-top: 25px;
+}
+
+.amounts{
+    display: flex;
+    justify-content:center;
+}
+
+.amounts h2{
+    line-height: 1.5;
+}
+
+/* select input field */
+
+select{
+    width: 90%;
+    background-color: #FAFAFA;
+}
+
+/* confirm */
+
+.confirm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.center{
+    text-align: center;
+}
+
+.row{
+    display: flex;
+    justify-content: center;
+}
+
+.confirm p{
+    color: var(--seconday);
+    font-weight: bold;
+}
+
+.extra-bold{
+    font-weight: 900;
+}
+
+.confirm span{
+    color: var(--primary);
+}
+
+.confirm h2{
+    color: var(--seconday);
+    margin-bottom: 10px;
+}
+
+.title{
+    text-align: center;
+}
+
+.shadow-box{
+    width: 480px;
+    padding: 15px 25px;
+    margin: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 3px 16px rgb(0 0 0 / 25%);
+}
+
+.shadow-box h3{
+    padding: 10px 0;
+}
+
+.shadow-box p{
+    padding: 5px 0;
+}
+
+span.capitalize{
+    text-transform: capitalize;
+}
+
+#agree_error{
+    color: var(--primary);
+    text-align: center;
+}
+
+/* peach payments */
+
+.wpwl-form-card{
+    background: none;
+    border: none;
+}
+
+.wpwl-button, .wpwl-button:hover, .wpwl-button-pay[disabled],.wpwl-button-pay[disabled]:hover{
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 51px;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px 28px;
+    background: transparent;
+    cursor: pointer;
+    display: inline-block;
+}
+.wpwl-label-brand, .wpwl-control-brand{
+    display: none;
+}
+
+.wpwl-label{
+    font-weight: bold;
+    font-family: 'Nunito', sans-serif;
+    color: var(--seconday);
+} 
+
+.wpwl-has-error~.wpwl-hint{
+    color: var(--primary);
+}
+
+.wpwl-has-error {
+    color: var(--primary);
+    border-color: var(--primary);
+    text-align: center;
+}
+

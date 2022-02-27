@@ -1,0 +1,21 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+
+<script>
+     var wpwlOptions = {
+        style: "card",
+
+        // Enable brand detection
+        brandDetection: true,
+        
+        // Use our internal BIN list to precisely detect brands
+        brandDetectionType: "binlist",
+        
+    }
+</script>
+<h3 class="center purple">Please enter your card details</h3>
+<script src="https://test.oppwa.com/v1/paymentWidgets.js?checkoutId={{ checkoutId }}"></script>
+<form action="{% url 'callback' %}" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
+
+
+{% include "pay/footer.html" %}

@@ -1,0 +1,62 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+
+<div class="confirm">
+    <div class="row">
+        <div>
+            <h2 class="title">Transaction Details</h2>
+            <div class="shadow-box">
+                <h2 class="extra-bold">Merchant: <span>{{ app_data.merchant_code }}</span></h2>
+                <p>Basket value: <span>R {{ app_data.amount }}</span></p>
+                <p>Number of instalments: <span>{{ period }}</span></p>
+                <p>Repayment date: <span>{{ billing_day }}</span></p>
+                <p>Membership fee: <span>R {{ ammacom_initiate.membership.monthly_price }}</span></p>
+                <p>Basket instalment: <span>R {}</span></p>
+                <p>Total instalment: <span>R {}</span></p>
+            </div>
+        </div>
+        <div>
+            <h2 class="title">Membership Details</h2>
+            <div class="shadow-box">
+                <p>Name: <span class="capitalize">{{ app_data.first_name}} {{ app_data.last_name }}</span></p>
+                <p>Email: <span>{{ app_data.email }}</span></p>
+                <p>Cell: <span>{{ app_data.mobile }}</span></p>
+                <p>Membership status: <span>{{ ammacom_initiate.membership.status }}</span></p>
+            </div>
+            <div class="shadow-box">
+                <p>Please pay your first instalment now using your Visa or MasterCard.</p>
+                <h2><span>{Monthly Fee}</span></h2>
+            </div>
+        </div>
+    </div>
+    <!-- { ammacom_initiate.payment_redirect } -->
+    <form action="{% url 'checkout' %}" method="POST" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <p id="agree_error"></p>
+        <div class="agree">
+            <div class="dlay-checkbox">
+                <input type="checkbox" id="pay_checkbox" name="pay_checkbox">
+                <label for="pay_checkbox"></label>
+            </div>
+            <label for="pay_checkbox" class="policy">By checking this box, you will be directed to our 3Dsecure payment page.</label>
+        </div>
+        <div class="center">
+            <input class="button" type="submit" value="pay now">
+        </div>
+    </form>
+</div>
+
+<script>
+function validateForm(){
+    var agree = document.getElementById("pay_checkbox").checked;
+    if(!agree){
+            document.getElementById("agree_error").innerHTML = "*Acknowladgment not accepted";
+            return false;
+        }else{
+            document.getElementById("agree_error").innerHTML = "";
+        }
+        return true;
+    }
+</script>
+
+{% include "pay/footer.html" %}

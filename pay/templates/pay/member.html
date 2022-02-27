@@ -1,0 +1,28 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+
+<div class="alt content">
+    <div class="content-form">
+        <div class="form-group">
+            <img src="{% static '/images/success.svg' %}"> 
+            <div class="form member">
+                <h1>Oh Yes!</h1>
+                <p>Your membership has been approved.</p>
+                <div class="amounts">
+                    <div>
+                        <p>You can buy up to:</p>
+                        <h2>R {{ request.session.ammacom_validate.amount_limit }}</h2>
+                    </div>
+                    <div>
+                        <p>Your basket value:</p>
+                        <h2>R {{ request.session.app_data.amount }}</h2>
+                    </div>
+                </div>
+                <a class="button" href="{% url 'instalment' %}">continue</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "pay/footer.html" %}
+

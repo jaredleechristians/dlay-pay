@@ -1,0 +1,38 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+
+<div class="alt content">
+    <div class="content-form">
+        <h3><span class="purple">Please select your </span>instalment date</h3>
+        <div class="form-group">
+            <div class="form member">
+                <form action="{% url 'confirm' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="amounts">
+                        <div>
+                            <p>Deposit Due Today</p>
+                            <h2>R {{ deposit }}</h2>
+                        </div>
+                        <div>
+                            <p>Next Payment Date</p>
+                            <select name="billing_day">
+                                <option>28</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p>Monthly Payment</p>
+                            <h2 class="purple">R {{ instalment }}</h2>
+                        </div>
+                        <div>
+                            <p>Monthly Membership</p>
+                            <h2 class="purple">R {{ ammacom_membership.membership.monthly_price }}</h2>
+                        </div>
+                    </div>
+                    <input type="submit" value="Continue" class="button" href="{% url 'instalment' %}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% include "pay/footer.html" %}
+
