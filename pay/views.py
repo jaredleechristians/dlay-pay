@@ -90,7 +90,8 @@ def confirm(request):
 			"full_amount" : float(request.session["app_data"]["amount"]),
 			"period" : int(request.session["period"]),
 			"email" : request.session["app_data"]["email"],
-			"status_callback": request.session["app_data"]["notify_url"]
+			"status_callback": request.session["app_data"]["notify_url"],
+			"e_commerce_redirect": request.session["app_data"]["return_url"]
 	}
 	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
@@ -113,27 +114,9 @@ def confirm(request):
 	return render(request,'pay/error.html',context)
 
 def checkout(request):
-	# https://peachpayments.docs.oppwa.com/tutorials/integration-guide
 	print("checkout")
-	url = "https://test.oppwa.com/v1/checkouts"
-	data = {
-		'entityId' : '8a8294174e735d0c014e78cf26461790',
-		'amount' : request.session["app_data"]['amount'],
-		'currency' : 'ZAR',
-		'paymentType' : 'DB'
-	}
-	bearer_token = "Bearer OGE4Mjk0MTc0ZTczNWQwYzAxNGU3OGNmMjY2YjE3OTR8cXl5ZkhDTjgzZQ=="
-	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
-	response = requests.post(url, json=data, headers=headers)
-
-	# generate checkoutID
-	''' 
-	if response.status_code == 200:
-		print("checkout create success")
- 		print(response.json())
-	'''
 	context = {
-		"checkoutId" : "42113E2F35ECEF7416D50747027FF9AB.uat01-vm-tx01"
+		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"]
 	}
 	return render(request,'pay/checkout.html',context)
 
