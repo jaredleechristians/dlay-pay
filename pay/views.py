@@ -47,10 +47,11 @@ def instalment(request):
 	id_no = request.session["app_data"]['id_no']
 	full_ammount = request.session["app_data"]['amount']
 
-	# calculate instalment period
-	request.session["period"] = 3
-	deposit = float(full_ammount) / request.session["period"]
-	instalment = deposit
+	# instalment period
+	request.session["period"] = float(request.session["app_data"]["period"])
+	# pay now
+	deposit = round(float(full_ammount) / request.session["period"],2)
+	request.session["app_data"]["deposit"] = deposit
 
 	url = "https://app-uat.dlay.co.za/server/api/membership-check"
 	query = {
@@ -64,13 +65,13 @@ def instalment(request):
 	if response.status_code == 200:
 		print(response.json())
 		request.session["membership"] = response.json()
+		request.session["app_data"]["instalment"] = round(request.session["app_data"]["deposit"] + float(request.session["membership"]["membership"]["monthly_price"]),2)
 		context = {
 			"app_data" : request.session["app_data"],
 			"ammacom_validate" : request.session["ammacom_validate"],
 			"ammacom_membership" : request.session["membership"],
 			"period" : request.session["period"],
-			"deposit" : round(deposit,2),
-			"instalment" : round(instalment,2),
+			"deposit" : round(deposit,2)
 		}
 		return render(request,'pay/instalment.html',context)
 	context = {

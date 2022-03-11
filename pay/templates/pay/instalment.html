@@ -1,6 +1,5 @@
 {% load static %}
 {% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
-
 <div class="alt content">
     <div class="content-form">
         <h3><span class="purple">Please select your </span>instalment date</h3>
@@ -15,13 +14,12 @@
                         </div>
                         <div>
                             <p>Next Payment Date</p>
-                            <select name="billing_day">
-                                <option>28</option>
+                            <select id="billing_day" name="billing_day">
                             </select>
                         </div>
                         <div>
                             <p>Monthly Payment</p>
-                            <h2 class="purple">R {{ instalment }}</h2>
+                            <h2 class="purple">R {{ deposit }}</h2>
                         </div>
                         <div>
                             <p>Monthly Membership</p>
@@ -35,4 +33,22 @@
     </div>
 </div>
 {% include "pay/footer.html" %}
+<script>
+function getDaysInMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
 
+const date = new Date();
+const currentYear = date.getFullYear();
+const currentMonth = date.getMonth() + 1;
+
+const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
+console.log(daysInCurrentMonth);
+for(let i = 1; i <= daysInCurrentMonth; i++){
+var option = document.createElement("option");
+option.text = i;
+option.value = i;
+var select = document.getElementById("billing_day");
+select.appendChild(option);
+}
+</script>

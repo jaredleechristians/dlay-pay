@@ -11,8 +11,8 @@
                 <p>Number of instalments: <span>{{ period }}</span></p>
                 <p>Repayment date: <span>{{ billing_day }}</span></p>
                 <p>Membership fee: <span>R {{ ammacom_initiate.membership.monthly_price }}</span></p>
-                <p>Basket instalment: <span>R {}</span></p>
-                <p>Total instalment: <span>R {}</span></p>
+                <p>Basket instalment: <span>R {{ app_data.deposit }}</span></p>
+                <p>Total instalment: <span>R {{ app_data.instalment }}</span></p>
             </div>
         </div>
         <div>
@@ -25,7 +25,7 @@
             </div>
             <div class="shadow-box">
                 <p>Please pay your first instalment now using your Visa or MasterCard.</p>
-                <h2><span>{Monthly Fee}</span></h2>
+                <h2><span>R {{ app_data.instalment }}</span></h2>
             </div>
         </div>
     </div>
