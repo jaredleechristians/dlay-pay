@@ -199,7 +199,7 @@ def qualify_validate(request):
 		context = {
 				"request_status" : response.json()["request_status"],
 		}
-		return redirect('/pay/member/',context)
+		return redirect('member/',context)
 	else:
 		print(response)
 		print(response.text)
@@ -207,6 +207,4 @@ def qualify_validate(request):
 				"description" : f" Error code: {response.status_code}"
 		}
 		return render(request,'pay/error.html',context)
-		
-		
 
