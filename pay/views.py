@@ -1,26 +1,23 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
 from .forms import id_form
 import requests
+import json
 
 from django.utils.http import urlencode
 
 
 @csrf_exempt
 def index(request):
-	sandbox = "https://app-uat.dlay.co.za"
-	live = "https://app.dlay.co.za"
 	if request.method == "POST":
 		form = id_form(request.POST)
 		if form.is_valid():
 			request.session['app_data'] = request.POST
-			if request.POST["sandbox"] == 'yes':
-				request.session['url'] = sandbox
-			else:
-				request.session['url'] = live
+			request.session['url'] = request.POST["api"]
 			auth(request)
 			return qualify_validate(request)
 
@@ -38,8 +35,6 @@ def index(request):
 		return render(request,'pay/error.html', context)
 
 def member(request):
-	# some logic over here
-
 	context = {
 		"data" : request.session['app_data'],
 		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"]))
@@ -135,26 +130,7 @@ def checkout(request):
 		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"]
 	}
 	return render(request,'pay/checkout.html',context)
-'''
-def callback(request):
-	print(request.GET)
-	url = "https://test.oppwa.com/v1/checkouts/"+ request.GET['id'] +"/payment"+"?entityId=8a8294174e735d0c014e78cf26461790"
-	bearer_token = "Bearer OGE4Mjk0MTc0ZTczNWQwYzAxNGU3OGNmMjY2YjE3OTR8cXl5ZkhDTjgzZQ=="
-	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
-	response = requests.get(url, headers=headers)
-	if response.status_code == 200:
-		print("validate checkout success")
-		print(response.json())
-		context = {
-			"response" : response.json()
-		}
-		return render(request,'pay/callback.html',context)
-	context = {
-		"response" : response.json(),
-		"description" : "payment error"
-	}
-	return render(request,'pay/error.html',context)
-'''
+
 def auth(request):
 	print("trying auth...")
 	url = "https://accounts.zoho.com/oauth/v2/token"
@@ -169,7 +145,6 @@ def auth(request):
 	if response.status_code == 200:
 		print("auth successful!")
 		access_token = response.json()["access_token"]
-		#print("access_token:", access_token)
 		request.session['access_token'] = access_token
 	else:
 		print(response)
@@ -178,7 +153,6 @@ def auth(request):
 def qualify_validate(request):
 	print("qualify-validate")
 	url = request.session["url"]+"/server/api/qualify-validate"
-	#print(request.session['app_data'])
 	first_name = request.session['app_data']['first_name']
 	query = {
 		"first_name" : first_name,
@@ -225,3 +199,19 @@ def qualify_validate(request):
 		}
 		return render(request,'pay/error.html',context)
 
+@csrf_exempt
+def conclude(request):
+	data = json.loads(request.body.decode("utf-8"))
+	auth(request)
+	url = data["api"]+"/server/api/conc-sub-setup"
+	query = {
+		"transaction_id" : data["transaction_id"],
+		"ammacom_id" : data["ammacom_id"],
+		"merchant_code" : data["merchant_code"],
+		"status" : data["status"]
+	}
+	print(query)
+	bearer_token = f"Bearer {request.session['access_token']}"
+	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
+	response = requests.post(url, json=query, headers=headers)
+	return JsonResponse(response.json(), status=201)

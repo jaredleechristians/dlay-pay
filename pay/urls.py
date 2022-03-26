@@ -7,5 +7,5 @@ urlpatterns = [
 	path('instalment/',views.instalment,name="instalment"),
 	path('confirm/',views.confirm,name="confirm"),
 	path('checkout/',views.checkout,name="checkout"),
-	#path('callback/',views.callback,name="callback"),
+	path('conclude/',views.conclude,name="conclude"),
 ]
