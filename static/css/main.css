@@ -9,6 +9,11 @@
     font-family: 'Nunito', sans-serif;;
 }
 
+a{
+color: var(--seconday);
+text-decoration: none;
+}
+
 body,html{
     min-height: calc(100vh);
     width: 100vw;
@@ -126,7 +131,7 @@ footer{
     height: 420px;
     width: 290px;
     margin-top: -38px;
-
+    margin-right: 10px;
 }
 
 .content{
@@ -184,6 +189,12 @@ form{
 
 .agree .policy{
     margin-left: 15px;
+}
+
+#row{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    align-items: end;
 }
 
 /* dlay checkbox */
@@ -440,6 +451,10 @@ span.capitalize{
     text-align: center;
 }
 
+.amounts{
+        flex-direction: column;
+}
+
 /* peach payments */
 
 .wpwl-form-card{
@@ -499,14 +514,14 @@ span.capitalize{
     .text-input, select {
     	width: 100%;
     }
-    .amounts{
-	flex-direction: column;
-    }
     .row{
 	flex-direction: column;
     }
     .wpwl-form-card{
 	margin: 15px;
+    }
+    .amounts h2{
+	font-size: 1.2em;
     }
 }
 

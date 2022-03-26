@@ -8,27 +8,32 @@ import requests
 
 from django.utils.http import urlencode
 
-# Create your views here.
 
 @csrf_exempt
 def index(request):
-	if request.method == "POST":			
+	sandbox = "https://app-uat.dlay.co.za"
+	live = "https://app.dlay.co.za"
+	if request.method == "POST":
 		form = id_form(request.POST)
 		if form.is_valid():
 			request.session['app_data'] = request.POST
+			if request.POST["sandbox"] == 'yes':
+				request.session['url'] = sandbox
+			else:
+				request.session['url'] = live
 			auth(request)
 			return qualify_validate(request)
-			
+
 		context = {
 			"form" : form,
 			"data" : request.POST
 		}
-		
+		print(context)
 		return render(request,'pay/index.html', context)
 	else:
 		# error no post data
 		context = {
-			'message' : "no post data"
+			'description' : "No post data"
 		}
 		return render(request,'pay/error.html', context)
 
@@ -36,7 +41,8 @@ def member(request):
 	# some logic over here
 
 	context = {
-		"data" : request.session['app_data']
+		"data" : request.session['app_data'],
+		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"]))
 	}
 	return render(request,'pay/member.html',context)
 
@@ -50,10 +56,15 @@ def instalment(request):
 	# instalment period
 	request.session["period"] = float(request.session["app_data"]["period"])
 	# pay now
-	deposit = round(float(full_ammount) / request.session["period"],2)
-	request.session["app_data"]["deposit"] = deposit
+	monthly = float(full_ammount) / request.session["period"]
+	pay_now = float(request.session["membership"]["membership"]["pay_now"])
+	membership = float(request.session["membership"]["membership"]["monthly_price"])
+	request.session["app_data"]["deposit"] = round(monthly + pay_now,2)
+	request.session["app_data"]["monthly"] = round(monthly,2)
+	request.session["app_data"]["total"] = round(monthly + membership,2)
+	request.session["app_data"]["membership"] = "{0:.2f}".format(membership)
 
-	url = "https://app-uat.dlay.co.za/server/api/membership-check"
+	url = request.session["url"]+"/server/api/membership-check"
 	query = {
 		"id_no" : id_no,
 		"full_amount" : float(full_ammount)
@@ -71,7 +82,10 @@ def instalment(request):
 			"ammacom_validate" : request.session["ammacom_validate"],
 			"ammacom_membership" : request.session["membership"],
 			"period" : request.session["period"],
-			"deposit" : round(deposit,2)
+			"monthly" : round(monthly,2),
+			"deposit" : round(monthly + pay_now,2),
+			"total" : round(monthly + membership,2),
+			"membership" : "{0:.2f}".format(membership)
 		}
 		return render(request,'pay/instalment.html',context)
 	context = {
@@ -82,7 +96,7 @@ def instalment(request):
 def confirm(request):
 	print(request.POST)
 	request.session["billing_day"] = request.POST['billing_day']
-	url = "https://app-uat.dlay.co.za/server/api/init-sub-setup"
+	url = request.session["url"]+"/server/api/init-sub-setup"
 	query = {
 			"transaction_id" : request.session["app_data"]["transaction_id"],
 			"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"],
@@ -108,6 +122,7 @@ def confirm(request):
 			"period" : int(request.session["period"]),
 			"billing_day" : request.session["billing_day"],
 		}
+		print(request.session["app_data"])
 		return render(request,'pay/confirm.html',context)
 	context = {
 			"description" : f"Error code: {response.status_code}"
@@ -120,7 +135,7 @@ def checkout(request):
 		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"]
 	}
 	return render(request,'pay/checkout.html',context)
-
+'''
 def callback(request):
 	print(request.GET)
 	url = "https://test.oppwa.com/v1/checkouts/"+ request.GET['id'] +"/payment"+"?entityId=8a8294174e735d0c014e78cf26461790"
@@ -139,7 +154,7 @@ def callback(request):
 		"description" : "payment error"
 	}
 	return render(request,'pay/error.html',context)
-
+'''
 def auth(request):
 	print("trying auth...")
 	url = "https://accounts.zoho.com/oauth/v2/token"
@@ -162,7 +177,7 @@ def auth(request):
 
 def qualify_validate(request):
 	print("qualify-validate")
-	url = "https://app-uat.dlay.co.za/server/api/qualify-validate"
+	url = request.session["url"]+"/server/api/qualify-validate"
 	#print(request.session['app_data'])
 	first_name = request.session['app_data']['first_name']
 	query = {
@@ -170,6 +185,7 @@ def qualify_validate(request):
 		"last_name" : request.session['app_data']['last_name'],
 		"mobile" : request.session['app_data']['mobile'],
 		"merchant_code" : request.session['app_data']['merchant_code'],
+		"merchant_name" : request.session['app_data']['merchant_name'],
 		"transaction_id" : request.session['app_data']['transaction_id'],
 		"id_no" : request.session['app_data']['id_no'],
 	}
@@ -185,7 +201,8 @@ def qualify_validate(request):
 		if response.json()["vetting_status"] == "DECLINED":
 			context = {
 				"request_status" : response.json()["request_status"],
-				"description" : "You do not meet our criteria. Please try again in 30 days."
+				"description" : "You do not meet our criteria. Please try again in 30 days.",
+				"reason" : response.json()["declined_reason"]
 			}
 			return render(request,'pay/error.html',context)
 

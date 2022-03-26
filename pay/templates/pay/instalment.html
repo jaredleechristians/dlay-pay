@@ -17,14 +17,26 @@
                             <select id="billing_day" name="billing_day">
                             </select>
                         </div>
+			<div id="row">
                         <div>
                             <p>Monthly Payment</p>
-                            <h2 class="purple">R {{ deposit }}</h2>
+                            <h2 class="purple">R {{ monthly }}</h2>
+                        </div>
+			<div>
+                            <h2 class="purple">+</h2>
                         </div>
                         <div>
                             <p>Monthly Membership</p>
-                            <h2 class="purple">R {{ ammacom_membership.membership.monthly_price }}</h2>
+                            <h2 class="purple">R {{ membership }}</h2>
                         </div>
+			<div>
+                            <h2 class="purple">=</h2>
+                        </div>
+			<div>
+                            <p>Monthly Total</p>
+                            <h2 class="purple">R {{ total }}</h2>
+                        </div>
+			</div>
                     </div>
                     <input type="submit" value="Continue" class="button" href="{% url 'instalment' %}"/>
                 </form>
