@@ -29,6 +29,9 @@
                 <h3>DLAY, <span class="purple">The membership that gives you the power to buy now & pay later</span></h3>
             </div>
         </div>
+	<div id="loading">
+                <img src="{% static 'images/Loading.gif' %}">
+        </div>
         <script>
             function validateForm() {
                 var policy = document.getElementById("checkbox").checked;
@@ -43,9 +46,14 @@
                 }else{
                     document.getElementById("policy_error").innerHTML = "";
                 }
+		loading();
                 return true;
                 
             }
+
+	    function loading(){
+		document.getElementById("loading").style.display = "flex";
+	    }
         </script>
     </body>
 {% include "pay/footer.html" %}

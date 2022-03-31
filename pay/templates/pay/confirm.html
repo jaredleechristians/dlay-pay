@@ -45,7 +45,9 @@
         </div>
     </form>
 </div>
-
+<div id="loading">
+	<img src="{% static 'images/Loading.gif' %}">
+</div>
 <script>
 function validateForm(){
     var agree = document.getElementById("pay_checkbox").checked;
@@ -55,8 +57,13 @@ function validateForm(){
         }else{
             document.getElementById("agree_error").innerHTML = "";
         }
+	loading();
         return true;
     }
+
+function loading(){
+	document.getElementById("loading").style.display = "flex";
+}
 </script>
 
 {% include "pay/footer.html" %}

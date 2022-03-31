@@ -495,6 +495,21 @@ span.capitalize{
     text-align: center;
 }
 
+#loading img{
+    width: 150px;
+}
+
+#loading{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 99;
+    width: 100vw;
+    height: 100%;
+    background-color: rgba(255,255,255,0.8);
+}
+
 @media only screen and (max-width: 600px) {
     body,html{
 	overflow-x: hidden;

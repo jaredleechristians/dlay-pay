@@ -5,7 +5,7 @@
         <h3><span class="purple">Please select your </span>instalment date</h3>
         <div class="form-group">
             <div class="form member">
-                <form action="{% url 'confirm' %}" method="POST">
+                <form action="{% url 'confirm' %}" onsubmit="loading()" method="POST">
                     {% csrf_token %}
                     <div class="amounts">
                         <div>
@@ -44,6 +44,9 @@
         </div>
     </div>
 </div>
+<div id="loading">
+	<img src="{% static 'images/Loading.gif' %}">
+</div>
 {% include "pay/footer.html" %}
 <script>
 function getDaysInMonth(year, month) {
@@ -62,5 +65,9 @@ option.text = i;
 option.value = i;
 var select = document.getElementById("billing_day");
 select.appendChild(option);
+
+function loading(){
+	document.getElementById("loading").style.display = "flex";
+}
 }
 </script>
