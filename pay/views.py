@@ -54,9 +54,9 @@ def instalment(request):
 	monthly = float(full_ammount) / request.session["period"]
 	pay_now = float(request.session["membership"]["membership"]["pay_now"])
 	membership = float(request.session["membership"]["membership"]["monthly_price"])
-	request.session["app_data"]["deposit"] = round(monthly + pay_now,2)
-	request.session["app_data"]["monthly"] = round(monthly,2)
-	request.session["app_data"]["total"] = round(monthly + membership,2)
+	request.session["app_data"]["deposit"] = "{0:.2f}".format(round(monthly + pay_now,2))
+	request.session["app_data"]["monthly"] = "{0:.2f}".format(round(monthly,2))
+	request.session["app_data"]["total"] = "{0:.2f}".format(round(monthly + membership,2))
 	request.session["app_data"]["membership"] = "{0:.2f}".format(membership)
 
 	url = request.session["url"]+"/server/api/membership-check"
@@ -71,15 +71,15 @@ def instalment(request):
 	if response.status_code == 200:
 		print(response.json())
 		request.session["membership"] = response.json()
-		request.session["app_data"]["instalment"] = round(request.session["app_data"]["deposit"] + float(request.session["membership"]["membership"]["monthly_price"]),2)
+		request.session["app_data"]["instalment"] = "{0:.2f}".format(round(float(request.session["app_data"]["deposit"]) + float(request.session["membership"]["membership"]["monthly_price"]),2))
 		context = {
 			"app_data" : request.session["app_data"],
 			"ammacom_validate" : request.session["ammacom_validate"],
 			"ammacom_membership" : request.session["membership"],
 			"period" : request.session["period"],
-			"monthly" : round(monthly,2),
-			"deposit" : round(monthly + pay_now,2),
-			"total" : round(monthly + membership,2),
+			"monthly" : "{0:.2f}".format(round(monthly,2)),
+			"deposit" : "{0:.2f}".format(round(monthly + pay_now,2)),
+			"total" : "{0:.2f}".format(round(monthly + membership,2)),
 			"membership" : "{0:.2f}".format(membership)
 		}
 		return render(request,'pay/instalment.html',context)
