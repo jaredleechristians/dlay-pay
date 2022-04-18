@@ -31,7 +31,7 @@
         </div>
     </div>
     <!-- { ammacom_initiate.payment_redirect } -->
-    <form action="{% url 'checkout' %}" method="POST" onsubmit="return validateForm()">
+    <form action="{% url 'rent_checkout' %}" method="POST" onsubmit="return validateForm()">
         {% csrf_token %}
         <p id="agree_error"></p>
         <div class="agree">

@@ -9,7 +9,7 @@
 	    </div>
             <div class="form member rent-sub">
 		<h3><span class="purple">Accept </span>Your Subscription</h3>
-                <form action="{% url 'confirm' %}" onsubmit="loading()" method="POST">
+                <form action="{% url 'rent_confirm' %}" onsubmit="loading()" method="POST">
                     {% csrf_token %}
                     <div id="row" class="amounts">
                         <div>
@@ -26,7 +26,7 @@
                             <h2 class="purple">R {{ total }}</h2>
                         </div>
                     </div>
-                    <input type="submit" value="Continue" class="button" href="{% url 'instalment' %}"/>
+                    <input type="submit" value="Continue" class="button"/>
                 </form>
             </div>
             </div>
