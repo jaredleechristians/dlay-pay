@@ -1,0 +1,62 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+<div class="rent alt content">
+    <div class="content-form">
+        <div class="form-group">
+	    <div class="row">
+	    <div class="product_image">
+		<img src="{{ product_image }}">
+	    </div>
+            <div class="form member rent-sub">
+		<h3><span class="purple">Accept </span>Your Subscription</h3>
+                <form action="{% url 'confirm' %}" onsubmit="loading()" method="POST">
+                    {% csrf_token %}
+                    <div id="row" class="amounts">
+                        <div>
+                            <p>Deposit Due Today</p>
+                            <h2>R {{ deposit }}</h2>
+                        </div>
+                        <div>
+                            <p>Next Payment Date</p>
+                            <select style="width: 150px" id="billing_day" name="billing_day">
+                            </select>
+                        </div>
+			<div>
+                            <p>Monthly Total</p>
+                            <h2 class="purple">R {{ total }}</h2>
+                        </div>
+                    </div>
+                    <input type="submit" value="Continue" class="button" href="{% url 'instalment' %}"/>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loading">
+	<img src="{% static 'images/Loading.gif' %}">
+</div>
+{% include "pay/footer.html" %}
+<script>
+function getDaysInMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+
+const date = new Date();
+const currentYear = date.getFullYear();
+const currentMonth = date.getMonth() + 1;
+
+const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
+console.log(daysInCurrentMonth);
+for(let i = 1; i <= daysInCurrentMonth; i++){
+var option = document.createElement("option");
+option.text = i;
+option.value = i;
+var select = document.getElementById("billing_day");
+select.appendChild(option);
+
+function loading(){
+	document.getElementById("loading").style.display = "flex";
+}
+}
+</script>

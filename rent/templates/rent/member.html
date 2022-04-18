@@ -1,0 +1,35 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+
+<div class="rent alt content">
+    <div class="content-form">
+        <div class="form-group">
+	    <div class="row">
+	    <div class="product_image">
+		<img src="{{ product_image }}">
+	    </div> 
+            <div class="form member">
+		<img class="success" src="{% static 'images/success.svg' %}">
+                <h1>Oh Yes!</h1>
+                <p>You have been approved for the {{ product_name }}.</p>
+                <div class="amounts">
+                    <div>
+                        <h2><span class="purple">Total</span> R {{ request.session.app_data.amount }}</h2>
+                    </div>
+                </div>
+                <a class="button" onclick="loading()" href="{% url 'instalment' %}">continue</a>
+            </div>
+	    </div>
+        </div>
+    </div>
+</div>
+<div id="loading">
+	<img src="{% static 'images/Loading.gif' %}">
+</div>
+<script>
+function loading(){
+	document.getElementById("loading").style.display = "flex";
+}
+</script>
+{% include "pay/footer.html" %}
+

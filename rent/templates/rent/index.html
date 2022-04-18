@@ -1,0 +1,59 @@
+{% load static %}
+{% include "pay/header.html" with return_url=data.cancel_url %}
+        <div class="content">
+            <div class="content-form">
+                <h3 class="name">{{ data.first_name }} {{data.last_name}} <span class="greeting">Lets get started with your membership application</span> </h3>
+                <div class="form-group">
+                    <div class="form">
+                        <form name="pay" method="POST" onsubmit="return validateForm()">
+                            <p>Please Enter Your 13 Digit ID Number <span class="id-tooltip">?<span class="id-tooltiptext">We need your ID Number to see if you qualify for the DLAY membership.</span></span></p>
+                            <p id="policy_error"></p>
+                            <div>
+                                {% for key, value in data.items %}
+                                    <input type="hidden" name="{{key}}" value="{{value}}">
+                                {% endfor %}
+                                {{ form }}
+                                
+                            </div>
+                            <div class="agree">
+                                <div class="dlay-checkbox">
+                                    <input type="checkbox" id="checkbox" name="policy-checkbox">
+                                    <label for="checkbox"></label>
+                                </div>
+                                <label for="checkbox" class="policy">I Agree to the <a target="_blank" href="#">Privacy Policy</a> and <a target="_blank" href="https://dlay.co.za/terms-conditions">Terms & Conditions.</a> This gives DLAY permission to perform a credit enquiry on me at the relevant credit bureau(s).</label>
+                            </div>
+			    <input class="button" type="submit" value="Continue">
+                        </form>
+                    </div>
+                </div>
+                <h3>DLAY, <span class="purple">The membership that gives you the power to buy now & pay later</span></h3>
+            </div>
+        </div>
+	<div id="loading">
+                <img src="{% static 'images/Loading.gif' %}">
+        </div>
+        <script>
+            function validateForm() {
+                var policy = document.getElementById("checkbox").checked;
+                var id_no = document.getElementById("id_id_no").value;
+                if(id_no.length < 1){
+                    document.getElementById("policy_error").innerHTML = "*We need your ID Number to see if you qualify for the DLAY membership.";
+                    return false;
+                }
+                if(!policy){
+                    document.getElementById("policy_error").innerHTML = "*Privacy Policy and Terms & Conditions not accepted";
+                    return false;
+                }else{
+                    document.getElementById("policy_error").innerHTML = "";
+                }
+		loading();
+                return true;
+                
+            }
+
+	    function loading(){
+		document.getElementById("loading").style.display = "flex";
+	    }
+        </script>
+    </body>
+{% include "pay/footer.html" %}

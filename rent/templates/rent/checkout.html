@@ -1,0 +1,9 @@
+{% load static %}
+{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+
+<h3 class="center purple">Please enter your card details</h3>
+<div id="dlay-widget"></div>
+<script async src="https://app-uat.dlay.co.za/server/pay/widget?dealId={{ ammacom_id }}"></script>
+
+
+{% include "pay/footer.html" %}

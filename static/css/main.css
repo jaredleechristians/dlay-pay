@@ -101,7 +101,7 @@ footer{
 
 .content-form{
     margin-left: -120px;
-    max-width: 790px;
+    max-width: 950px;
     width: 100%;
 }
 
@@ -112,7 +112,7 @@ footer{
 
 .form{
     width: 100%;
-    max-width: 900px;
+    max-width: 750px;
     border-radius: 51px;
     box-shadow: 0 3px 16px rgba(0, 0, 0, 0.25);
     padding: 25px;
@@ -330,7 +330,7 @@ form{
 
   .alt .content-form{
     margin-left: -80px;
-    max-width: 790px;
+    max-width: 950px;
     width: 100%;
 }
 
@@ -342,7 +342,12 @@ form{
     height: 390px;
     width: 290px;
     margin-top: 50px;
-} 
+}
+
+.rent:before{
+   background-image: none;
+   content: none;
+}
 
 .alt img{
     width: 100px;
@@ -419,7 +424,6 @@ select{
 
 .confirm h2{
     color: var(--seconday);
-    margin-bottom: 10px;
 }
 
 .title{
@@ -538,5 +542,31 @@ span.capitalize{
     .amounts h2{
 	font-size: 1.2em;
     }
+    #row{
+	display: inherit;
+    }
 }
 
+
+.product_image{
+   text-align: center;
+   padding: 30px 0;
+}
+
+.product_image img{
+   width: 300px;
+   max-width: 300px;
+}
+
+.rent img.success{
+   margin-bottom: 0;
+   margin-top: -65px;
+}
+
+.box{
+  margin: 15px 20px;
+}
+
+.confirm .row div{
+  min-width: 50%;
+}
