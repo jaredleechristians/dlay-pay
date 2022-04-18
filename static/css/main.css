@@ -351,7 +351,6 @@ form{
 
 .alt img{
     width: 100px;
-    aspect-ratio: 1;
     margin-bottom: -35px;
     position: relative;
 }
@@ -407,6 +406,7 @@ select{
 .row{
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .confirm p{
