@@ -210,7 +210,7 @@ def conclude(request):
 		"ammacom_id" : data["ammacom_id"],
 		"merchant_code" : data["merchant_code"],
 		"status" : data["status"],
-		"serial" : data["serial"]
+		"serial_no" : data["serial"]
 	}
 	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
