@@ -209,7 +209,8 @@ def conclude(request):
 		"transaction_id" : data["transaction_id"],
 		"ammacom_id" : data["ammacom_id"],
 		"merchant_code" : data["merchant_code"],
-		"status" : data["status"]
+		"status" : data["status"],
+		"serial" : data["serial"]
 	}
 	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
