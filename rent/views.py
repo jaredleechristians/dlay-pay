@@ -36,6 +36,11 @@ def index(request):
 
 def member(request):
 	product = json.loads(request.session['app_data']['products'])
+	thisprod = {
+		"product_code" : product[0]["product_code"]
+	}
+	arr = [thisprod]
+	request.session['product_code'] = arr
 	request.session['product'] = product[0]
 	context = {
 		"product_name" : product[0]['product_name'],
@@ -97,7 +102,7 @@ def instalment(request):
 def confirm(request):
 	print(request.POST)
 	request.session["billing_day"] = request.POST['billing_day']
-	url = request.session["url"]+"/server/api/init-sub-setup"
+	url = request.session["url"]+"/server/api/init-sub-setup" 
 	query = {
 			"transaction_id" : request.session["app_data"]["transaction_id"],
 			"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"],
@@ -108,7 +113,7 @@ def confirm(request):
 			"email" : request.session["app_data"]["email"],
 			"status_callback": request.session["app_data"]["notify_url"],
 			"e_commerce_redirect": request.session["app_data"]["return_url"],
-			"products" : request.session["product"]
+			"products" : request.session["product_code"]
 	}
 	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
@@ -129,6 +134,7 @@ def confirm(request):
 	context = {
 			"description" : f"Error code: {response.status_code}"
 		}
+	#print(response.json())
 	return render(request,'rent/error.html',context)
 
 def checkout(request):

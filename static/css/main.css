@@ -534,6 +534,7 @@ span.capitalize{
     	width: 100%;
     }
     .row{
+	display: block;
 	flex-direction: column;
     }
     .wpwl-form-card{
