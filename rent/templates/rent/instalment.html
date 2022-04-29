@@ -8,13 +8,13 @@
 		<img src="{{ product_image }}">
 	    </div>
             <div class="form member rent-sub">
-		<h3><span class="purple">Accept </span>Your Subscription</h3>
+		<h3><span class="purple">Choose </span>Your Payment Date</h3>
                 <form action="{% url 'rent_confirm' %}" onsubmit="loading()" method="POST">
                     {% csrf_token %}
                     <div id="row" class="amounts">
                         <div>
                             <p>Deposit Due Today</p>
-                            <h2>R {{ deposit }}</h2>
+                            <h2>R {{ monthly_fee }}</h2>
                         </div>
                         <div>
                             <p>Next Payment Date</p>
@@ -22,8 +22,8 @@
                             </select>
                         </div>
 			<div>
-                            <p>Monthly Total</p>
-                            <h2 class="purple">R {{ total }}</h2>
+                            <p>Monthly Rental</p>
+                            <h2 class="purple">R {{ monthly_fee }}</h2>
                         </div>
                     </div>
                     <input type="submit" value="Continue" class="button"/>

@@ -20,10 +20,10 @@
         </div>
         <div>
             <div class="shadow-box">
-		<h2><span>Instalment: </span> R {{ app_data.total }}</h2>
+		<h2><span>Monthly Rental: </span> R {{ monthly_fee }}</h2>
             </div>
             <div class="shadow-box">
-                <h2><span>To pay now:</span> R {{ app_data.deposit }}</h2>
+                <h2><span>To pay now: </span> R {{ monthly_fee }}</h2>
             </div>
 	    <div class="box">
 	    	<p>Please pay your first instalment now using your Visa or MasterCard.</p>
@@ -39,7 +39,7 @@
                 <input type="checkbox" id="pay_checkbox" name="pay_checkbox">
                 <label for="pay_checkbox"></label>
             </div>
-            <label for="pay_checkbox" class="policy">By checking this box, you will be directed to our 3Dsecure payment page.</label>
+            <label for="pay_checkbox" class="policy">By ticking the checkbox, you are accepting the <a href="#">DLAY Terms and Conditions</a> and <a href="#">Subscription Agreement.</a></label>
         </div>
         <div class="center">
             <input class="button" type="submit" value="pay now">
@@ -65,6 +65,13 @@ function validateForm(){
 function loading(){
 	document.getElementById("loading").style.display = "flex";
 }
+
+
+$(window).load(function(){
+   // PAGE IS FULLY LOADED  
+   // FADE OUT YOUR OVERLAYING DIV
+   $('#loading').fadeOut();
+});
 </script>
 
 {% include "pay/footer.html" %}

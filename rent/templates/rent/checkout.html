@@ -4,6 +4,12 @@
 <h3 class="center purple">Please enter your card details</h3>
 <div id="dlay-widget"></div>
 <script async src="https://app-uat.dlay.co.za/server/pay/widget?dealId={{ ammacom_id }}"></script>
-
-
+<div id="loading" style="display: flex">
+        <img src="{% static 'images/Loading.gif' %}">
+</div>
+<script>
+window.onload = function () { 
+	document.getElementById("loading").style.display = "none";
+    }
+</script>
 {% include "pay/footer.html" %}

@@ -46,7 +46,9 @@ def member(request):
 		"product_name" : product[0]['product_name'],
 		"product_image" : product[0]['product_image'],
 		"data" : request.session['app_data'],
-		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"]))
+		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"])),
+		"monthly_fee" : "{0:.2f}".format(float(request.session['app_data']['monthly_fee'])),
+		"period" : request.session['app_data']['period']
 	}
 	return render(request,'rent/member.html',context)
 
@@ -91,7 +93,8 @@ def instalment(request):
 			"monthly" : "{0:.2f}".format(round(monthly,2)),
 			"deposit" : "{0:.2f}".format(round(monthly + pay_now,2)),
 			"total" : "{0:.2f}".format(round(monthly + membership,2)),
-			"membership" : "{0:.2f}".format(membership)
+			"membership" : "{0:.2f}".format(membership),
+			"monthly_fee" : "{0:.2f}".format(float(request.session['app_data']['monthly_fee']))
 		}
 		return render(request,'rent/instalment.html',context)
 	context = {
@@ -128,6 +131,7 @@ def confirm(request):
 			"ammacom_initiate" : request.session["ammacom_initiate"],
 			"period" : int(request.session["period"]),
 			"billing_day" : request.session["billing_day"],
+			"monthly_fee" : "{0:.2f}".format(float(request.session['app_data']['monthly_fee']))
 		}
 		print(request.session["app_data"])
 		return render(request,'rent/confirm.html',context)
@@ -191,6 +195,15 @@ def qualify_validate(request):
 				"description" : "You do not meet our criteria. Please try again in 30 days.",
 				"reason" : response.json()["declined_reason"]
 			}
+			query = {
+				"ammacom_id" : response.json()["ammacom_id"],
+				"transaction_id" : request.session["app_data"]["transaction_id"],
+				"setup_status" : "OK",
+				"setup_message" : "Vetting Declined",
+			}
+			print(query)
+			response = requests.post(request.session["app_data"]["notify_url"], json=query, headers=[])
+			print(response.json())
 			return render(request,'rent/error.html',context)
 
 		# cart exeeds approved value
@@ -200,10 +213,28 @@ def qualify_validate(request):
 				"request_status" : response.json()["request_status"],
 				"description" : "You qualify for a cheaper device."
 			}
+			query = {
+                                "ammacom_id" : response.json()["ammacom_id"],
+                                "transaction_id" : request.session["app_data"]["transaction_id"],
+                                "setup_status" : "OK",
+                                "setup_message" : "Cheaper Deal",
+                        }
+			print(query)
+			response = requests.post(request.session["app_data"]["notify_url"], json=query, headers=[])
+			print(response.json())
 			return render(request,'rent/error-limit.html',context)
+		# Approved
 		context = {
 				"request_status" : response.json()["request_status"],
 		}
+		query = {
+				"ammacom_id" : response.json()["ammacom_id"],
+				"transaction_id" : request.session["app_data"]["transaction_id"],
+				"setup_status" : "OK",
+				"setup_message" : "Vetting Approved",
+                        }
+		print(query)
+		response = requests.post(request.session["app_data"]["notify_url"], json=query, headers=[])
 		return redirect('member/',context)
 	else:
 		print(response)
