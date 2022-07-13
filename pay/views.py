@@ -212,8 +212,4 @@ def conclude(request):
 		"status" : data["status"],
 		"serial_no" : data["serial"]
 	}
-	print(query)
-	bearer_token = f"Bearer {request.session['access_token']}"
-	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
-	response = requests.post(url, json=query, headers=headers)
-	return JsonResponse(response.json(), status=201)
+	return query;

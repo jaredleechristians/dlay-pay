@@ -39,17 +39,41 @@
                 <input type="checkbox" id="pay_checkbox" name="pay_checkbox">
                 <label for="pay_checkbox"></label>
             </div>
-            <label for="pay_checkbox" class="policy">By ticking the checkbox, you are accepting the <a href="#">DLAY Terms and Conditions</a> and <a href="#">Subscription Agreement.</a></label>
+            <label for="pay_checkbox" class="policy">By ticking the checkbox, you are accepting the <a href="#" id="termsLinkOpen">DLAY Terms and Conditions</a> and <a href="#" id="agreementLinkOpen">Subscription Agreement.</a></label>
         </div>
         <div class="center">
             <input class="button" type="submit" value="pay now">
         </div>
     </form>
 </div>
+<div id="terms">
+	<object data="{% static 'html/terms.html' %}"> 
+    		Your browser doesn’t support the object tag. 
+	</object>
+</div>
+
+<div id="agreement">
+        <object data="{% static 'html/agreement.html' %}">
+                Your browser doesn’t support the object tag.
+        </object>
+</div>
+
 <div id="loading">
 	<img src="{% static 'images/Loading.gif' %}">
 </div>
 <script>
+var termsLinkOpen = document.getElementById('termsLinkOpen');
+termsLinkOpen.onclick = toggleTerms;
+
+var termsLinkClose = document.getElementById('termsLinkClose');
+termsLinkClose.onclick = toggleTerms;
+
+var agreementLinkOpen = document.getElementById('agreementLinkOpen');
+agreementLinkOpen.onclick = toggleAgreement;
+
+var agreementLinkClose = document.getElementById('agreementLinkClose');
+agreementLinkClose.onclick = toggleAgreement;
+
 function validateForm(){
     var agree = document.getElementById("pay_checkbox").checked;
     if(!agree){
@@ -66,6 +90,15 @@ function loading(){
 	document.getElementById("loading").style.display = "flex";
 }
 
+function toggleTerms() {
+  var element = document.getElementById("terms");
+  element.classList.toggle("show");
+}
+
+function toggleAgreement() {
+  var element = document.getElementById("agreement");
+  element.classList.toggle("show");
+}
 
 $(window).load(function(){
    // PAGE IS FULLY LOADED  

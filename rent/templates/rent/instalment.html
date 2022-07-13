@@ -8,7 +8,7 @@
 		<img src="{{ product_image }}">
 	    </div>
             <div class="form member rent-sub">
-		<h3><span class="purple">Choose </span>Your Payment Date</h3>
+		<h3><span class="purple">Please  </span>select your payment date</h3>
                 <form action="{% url 'rent_confirm' %}" onsubmit="loading()" method="POST">
                     {% csrf_token %}
                     <div id="row" class="amounts">

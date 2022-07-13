@@ -26,31 +26,20 @@ def index(request):
 			"data" : request.POST
 		}
 		print(context)
-		return render(request,'rent/index.html', context)
+		return render(request,'pay/index.html', context)
 	else:
 		# error no post data
 		context = {
 			'description' : "No post data"
 		}
-		return render(request,'rent/error.html', context)
+		return render(request,'pay/error.html', context)
 
 def member(request):
-	product = json.loads(request.session['app_data']['products'])
-	thisprod = {
-		"product_code" : product[0]["product_code"]
-	}
-	arr = [thisprod]
-	request.session['product_code'] = arr
-	request.session['product'] = product[0]
 	context = {
-		"product_name" : product[0]['product_name'],
-		"product_image" : product[0]['product_image'],
 		"data" : request.session['app_data'],
-		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"])),
-		"monthly_fee" : "{0:.2f}".format(float(request.session['app_data']['monthly_fee'])),
-		"period" : request.session['app_data']['period']
+		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"]))
 	}
-	return render(request,'rent/member.html',context)
+	return render(request,'pay/member.html',context)
 
 def instalment(request):
 	print(request.session["app_data"])
@@ -85,7 +74,6 @@ def instalment(request):
 
 		request.session["app_data"]["instalment"] = "{0:.2f}".format(round(float(request.session["app_data"]["deposit"]) + float(request.session["membership"]["membership"]["monthly_price"]),2))
 		context = {
-			"product_image" : request.session["product"]["product_image"],
 			"app_data" : request.session["app_data"],
 			"ammacom_validate" : request.session["ammacom_validate"],
 			"ammacom_membership" : request.session["membership"],
@@ -93,19 +81,18 @@ def instalment(request):
 			"monthly" : "{0:.2f}".format(round(monthly,2)),
 			"deposit" : "{0:.2f}".format(round(monthly + pay_now,2)),
 			"total" : "{0:.2f}".format(round(monthly + membership,2)),
-			"membership" : "{0:.2f}".format(membership),
-			"monthly_fee" : "{0:.2f}".format(float(request.session['app_data']['monthly_fee']))
+			"membership" : "{0:.2f}".format(membership)
 		}
-		return render(request,'rent/instalment.html',context)
+		return render(request,'pay/instalment.html',context)
 	context = {
 			"description" : f"Error code: {response.status_code}"
 		}
-	return render(request,'rent/error.html',context)
+	return render(request,'pay/error.html',context)
 
 def confirm(request):
 	print(request.POST)
 	request.session["billing_day"] = request.POST['billing_day']
-	url = request.session["url"]+"/server/api/init-sub-setup" 
+	url = request.session["url"]+"/server/api/init-sub-setup"
 	query = {
 			"transaction_id" : request.session["app_data"]["transaction_id"],
 			"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"],
@@ -115,8 +102,7 @@ def confirm(request):
 			"period" : int(request.session["period"]),
 			"email" : request.session["app_data"]["email"],
 			"status_callback": request.session["app_data"]["notify_url"],
-			"e_commerce_redirect": request.session["app_data"]["return_url"],
-			"products" : request.session["product_code"]
+			"e_commerce_redirect": request.session["app_data"]["return_url"]
 	}
 	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
@@ -131,22 +117,20 @@ def confirm(request):
 			"ammacom_initiate" : request.session["ammacom_initiate"],
 			"period" : int(request.session["period"]),
 			"billing_day" : request.session["billing_day"],
-			"monthly_fee" : "{0:.2f}".format(float(request.session['app_data']['monthly_fee']))
 		}
 		print(request.session["app_data"])
-		return render(request,'rent/confirm.html',context)
+		return render(request,'pay/confirm.html',context)
 	context = {
 			"description" : f"Error code: {response.status_code}"
 		}
-	#print(response.json())
-	return render(request,'rent/error.html',context)
+	return render(request,'pay/error.html',context)
 
 def checkout(request):
 	print("checkout")
 	context = {
 		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"]
 	}
-	return render(request,'rent/checkout.html',context)
+	return render(request,'pay/checkout.html',context)
 
 def auth(request):
 	print("trying auth...")
@@ -195,46 +179,18 @@ def qualify_validate(request):
 				"description" : "You do not meet our criteria. Please try again in 30 days.",
 				"reason" : response.json()["declined_reason"]
 			}
-			query = {
-				"ammacom_id" : response.json()["ammacom_id"],
-				"transaction_id" : request.session["app_data"]["transaction_id"],
-				"setup_status" : "OK",
-				"setup_message" : "Vetting Declined",
-			}
-			print(query)
-			response = requests.post(request.session["app_data"]["notify_url"], json=query, headers=[])
-			print(response.json())
-			return render(request,'rent/error.html',context)
+			return render(request,'pay/error.html',context)
 
 		# cart exeeds approved value
 		if float(request.session['app_data']['amount']) >= float(response.json()["amount_limit"]):
 			context = {
-				"amount_limit" : "{0:.2f}".format(float(response.json()["amount_limit"])),
 				"request_status" : response.json()["request_status"],
-				"description" : "You qualify for a cheaper device."
+				"description" : "Your cart value exeeds the approved DLAY amount."
 			}
-			query = {
-                                "ammacom_id" : response.json()["ammacom_id"],
-                                "transaction_id" : request.session["app_data"]["transaction_id"],
-                                "setup_status" : "OK",
-                                "setup_message" : "Cheaper Deal",
-                        }
-			print(query)
-			response = requests.post(request.session["app_data"]["notify_url"], json=query, headers=[])
-			print(response.json())
-			return render(request,'rent/error-limit.html',context)
-		# Approved
+			return render(request,'pay/error.html',context)
 		context = {
 				"request_status" : response.json()["request_status"],
 		}
-		query = {
-				"ammacom_id" : response.json()["ammacom_id"],
-				"transaction_id" : request.session["app_data"]["transaction_id"],
-				"setup_status" : "OK",
-				"setup_message" : "Vetting Approved",
-                        }
-		print(query)
-		response = requests.post(request.session["app_data"]["notify_url"], json=query, headers=[])
 		return redirect('member/',context)
 	else:
 		print(response)
@@ -242,7 +198,7 @@ def qualify_validate(request):
 		context = {
 				"description" : f" Error code: {response.status_code}"
 		}
-		return render(request,'rent/error.html',context)
+		return render(request,'pay/error.html',context)
 
 @csrf_exempt
 def conclude(request):
@@ -253,10 +209,7 @@ def conclude(request):
 		"transaction_id" : data["transaction_id"],
 		"ammacom_id" : data["ammacom_id"],
 		"merchant_code" : data["merchant_code"],
-		"status" : data["status"]
+		"status" : data["status"],
+		"serial_no" : data["serial"]
 	}
-	print(query)
-	bearer_token = f"Bearer {request.session['access_token']}"
-	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
-	response = requests.post(url, json=query, headers=headers)
-	return JsonResponse(response.json(), status=201)
+	return query;

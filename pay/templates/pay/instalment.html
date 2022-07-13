@@ -2,7 +2,7 @@
 {% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
 <div class="alt content">
     <div class="content-form">
-        <h3><span class="purple">Please select your </span>instalment date</h3>
+        <h3><span class="purple">Please select your </span>payment date</h3>
         <div class="form-group">
             <div class="form member">
                 <form action="{% url 'confirm' %}" onsubmit="loading()" method="POST">

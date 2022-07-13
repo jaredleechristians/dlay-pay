@@ -6,7 +6,7 @@
                 <div class="form-group">
                     <div class="form">
                         <form name="pay" method="POST" onsubmit="return validateForm()">
-                            <p>Please Enter Your 13 Digit ID Number <span class="id-tooltip">?<span class="id-tooltiptext">We need your ID Number to see if you qualify for the DLAY membership.</span></span></p>
+                            <p>Please Enter Your 13 Digit ID Number <span class="id-tooltip">?<span class="id-tooltiptext">We need your ID Number to see if you qualify.</span></span></p>
                             <p id="policy_error"></p>
                             <div>
                                 {% for key, value in data.items %}
@@ -20,7 +20,7 @@
                                     <input type="checkbox" id="checkbox" name="policy-checkbox">
                                     <label for="checkbox"></label>
                                 </div>
-                                <label for="checkbox" class="policy">I Agree to the <a target="_blank" href="#">Privacy Policy</a> and <a target="_blank" href="https://dlay.co.za/terms-conditions">Terms & Conditions.</a> This gives DLAY permission to perform a credit enquiry on me at the relevant credit bureau(s).</label>
+                                <label for="checkbox" class="policy">I Agree to the <a target="_blank" href="https://dlay.co.za/privacy-policy">Privacy Policy</a> and <a target="_blank" href="https://dlay.co.za/terms-conditions">Terms & Conditions.</a> This gives DLAY permission to perform a credit enquiry on me at the relevant credit bureau(s).</label>
                             </div>
 			    <input class="button" type="submit" value="Continue">
                         </form>
