@@ -26,20 +26,20 @@ def index(request):
 			"data" : request.POST
 		}
 		print(context)
-		return render(request,'pay/index.html', context)
+		return render(request,'rent/index.html', context)
 	else:
 		# error no post data
 		context = {
 			'description' : "No post data"
 		}
-		return render(request,'pay/error.html', context)
+		return render(request,'rent/error.html', context)
 
 def member(request):
 	context = {
 		"data" : request.session['app_data'],
 		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"]))
 	}
-	return render(request,'pay/member.html',context)
+	return render(request,'rent/member.html',context)
 
 def instalment(request):
 	print(request.session["app_data"])
@@ -83,11 +83,11 @@ def instalment(request):
 			"total" : "{0:.2f}".format(round(monthly + membership,2)),
 			"membership" : "{0:.2f}".format(membership)
 		}
-		return render(request,'pay/instalment.html',context)
+		return render(request,'rent/instalment.html',context)
 	context = {
 			"description" : f"Error code: {response.status_code}"
 		}
-	return render(request,'pay/error.html',context)
+	return render(request,'rent/error.html',context)
 
 def confirm(request):
 	print(request.POST)
@@ -119,18 +119,18 @@ def confirm(request):
 			"billing_day" : request.session["billing_day"],
 		}
 		print(request.session["app_data"])
-		return render(request,'pay/confirm.html',context)
+		return render(request,'rent/confirm.html',context)
 	context = {
 			"description" : f"Error code: {response.status_code}"
 		}
-	return render(request,'pay/error.html',context)
+	return render(request,'rent/error.html',context)
 
 def checkout(request):
 	print("checkout")
 	context = {
 		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"]
 	}
-	return render(request,'pay/checkout.html',context)
+	return render(request,'rent/checkout.html',context)
 
 def auth(request):
 	print("trying auth...")
@@ -179,7 +179,7 @@ def qualify_validate(request):
 				"description" : "You do not meet our criteria. Please try again in 30 days.",
 				"reason" : response.json()["declined_reason"]
 			}
-			return render(request,'pay/error.html',context)
+			return render(request,'rent/error.html',context)
 
 		# cart exeeds approved value
 		if float(request.session['app_data']['amount']) >= float(response.json()["amount_limit"]):
@@ -187,7 +187,7 @@ def qualify_validate(request):
 				"request_status" : response.json()["request_status"],
 				"description" : "Your cart value exeeds the approved DLAY amount."
 			}
-			return render(request,'pay/error.html',context)
+			return render(request,'rent/error.html',context)
 		context = {
 				"request_status" : response.json()["request_status"],
 		}
@@ -198,7 +198,7 @@ def qualify_validate(request):
 		context = {
 				"description" : f" Error code: {response.status_code}"
 		}
-		return render(request,'pay/error.html',context)
+		return render(request,'rent/error.html',context)
 
 @csrf_exempt
 def conclude(request):
