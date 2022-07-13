@@ -35,9 +35,14 @@ def index(request):
 		return render(request,'rent/error.html', context)
 
 def member(request):
+	product = json.loads(request.session['app_data']['products'])
+	request.session['product'] = product[0]
 	context = {
+		"product_name" : product[0]['product_name'],
+		"product_image" : product[0]['product_image'],
 		"data" : request.session['app_data'],
-		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"]))
+		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"])),
+		"monthly_fee" : request.session['app_data']['monthly_fee']
 	}
 	return render(request,'rent/member.html',context)
 
@@ -74,6 +79,7 @@ def instalment(request):
 
 		request.session["app_data"]["instalment"] = "{0:.2f}".format(round(float(request.session["app_data"]["deposit"]) + float(request.session["membership"]["membership"]["monthly_price"]),2))
 		context = {
+			"product_image" : request.session["product"]["product_image"],
 			"app_data" : request.session["app_data"],
 			"ammacom_validate" : request.session["ammacom_validate"],
 			"ammacom_membership" : request.session["membership"],
@@ -81,8 +87,10 @@ def instalment(request):
 			"monthly" : "{0:.2f}".format(round(monthly,2)),
 			"deposit" : "{0:.2f}".format(round(monthly + pay_now,2)),
 			"total" : "{0:.2f}".format(round(monthly + membership,2)),
-			"membership" : "{0:.2f}".format(membership)
+			"membership" : "{0:.2f}".format(membership),
+			"monthly_fee" : request.session["app_data"]["monthly_fee"]
 		}
+
 		return render(request,'rent/instalment.html',context)
 	context = {
 			"description" : f"Error code: {response.status_code}"
@@ -117,6 +125,7 @@ def confirm(request):
 			"ammacom_initiate" : request.session["ammacom_initiate"],
 			"period" : int(request.session["period"]),
 			"billing_day" : request.session["billing_day"],
+			"monthly_fee" : request.session["app_data"]["monthly_fee"]
 		}
 		print(request.session["app_data"])
 		return render(request,'rent/confirm.html',context)
