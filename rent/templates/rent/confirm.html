@@ -39,21 +39,23 @@
                 <input type="checkbox" id="pay_checkbox" name="pay_checkbox">
                 <label for="pay_checkbox"></label>
             </div>
-            <label for="pay_checkbox" class="policy">By ticking the checkbox, you are accepting the <a href="#" id="termsLinkOpen">DLAY Terms and Conditions</a> and <a href="#" id="agreementLinkOpen">Subscription Agreement.</a></label>
+            <label for="pay_checkbox" class="policy">By ticking the checkbox, you are accepting the <button id="termsOpen">DLAY Terms and Conditions</button> and <button id="agreementOpen">Subscription Agreement.</button></label>
         </div>
         <div class="center">
             <input class="button" type="submit" value="pay now">
         </div>
     </form>
 </div>
-<div id="terms">
-	<object data="{% static 'html/terms.html' %}"> 
+<div id="terms" style="display:none">
+	<button id="termsClose">close</button>
+	<object data="{% static 'html/terms.html' %}" style="width: 100vw;height: 100vh;"> 
     		Your browser doesn’t support the object tag. 
 	</object>
 </div>
 
-<div id="agreement">
-        <object data="{% static 'html/agreement.html' %}">
+<div id="agreement" style="display:none">
+	<button id="agreementClose">close</button>
+        <object data="{% static 'html/agreement.html' %}" style="width: 100vw;height: 100vh;">
                 Your browser doesn’t support the object tag.
         </object>
 </div>
@@ -62,17 +64,38 @@
 	<img src="{% static 'images/Loading.gif' %}">
 </div>
 <script>
-var termsLinkOpen = document.getElementById('termsLinkOpen');
+var termsLinkOpen = document.getElementById('termsOpen');
 termsLinkOpen.onclick = toggleTerms;
-
-var termsLinkClose = document.getElementById('termsLinkClose');
-termsLinkClose.onclick = toggleTerms;
-
-var agreementLinkOpen = document.getElementById('agreementLinkOpen');
+var termsLinkClose = document.getElementById('termsClose');
+termsLinkClose.onclick = toggleTerms; 
+var agreementLinkOpen = document.getElementById('agreementOpen'); 
 agreementLinkOpen.onclick = toggleAgreement;
-
-var agreementLinkClose = document.getElementById('agreementLinkClose');
+var agreementLinkClose = document.getElementById('agreementClose');
 agreementLinkClose.onclick = toggleAgreement;
+
+function toggleTerms (e) {
+    e.preventDefault();
+    console.log("toggle terms");
+    var div = document.getElementById('terms');
+    if (div.style.display !== 'none') {
+        div.style.display = 'none';
+    }
+    else {
+        div.style.display = 'block';
+    }
+};
+
+function toggleAgreement (e) {
+    e.preventDefault();
+    console.log("toggle agreement");
+    var div = document.getElementById('agreement');
+    if (div.style.display !== 'none') {
+        div.style.display = 'none';
+    }
+    else {
+        div.style.display = 'block';
+    }
+};
 
 function validateForm(){
     var agree = document.getElementById("pay_checkbox").checked;
@@ -88,16 +111,6 @@ function validateForm(){
 
 function loading(){
 	document.getElementById("loading").style.display = "flex";
-}
-
-function toggleTerms() {
-  var element = document.getElementById("terms");
-  element.classList.toggle("show");
-}
-
-function toggleAgreement() {
-  var element = document.getElementById("agreement");
-  element.classList.toggle("show");
 }
 
 $(window).load(function(){
