@@ -211,14 +211,18 @@ def qualify_validate(request):
 
 @csrf_exempt
 def conclude(request):
-	data = json.loads(request.body.decode("utf-8"))
-	auth(request)
-	url = data["api"]+"/server/api/conc-sub-setup"
-	query = {
-		"transaction_id" : data["transaction_id"],
-		"ammacom_id" : data["ammacom_id"],
-		"merchant_code" : data["merchant_code"],
-		"status" : data["status"],
-		"serial_no" : data["serial"]
-	}
-	return query;
+        data = json.loads(request.body.decode("utf-8"))
+        auth(request)
+        url = data["api"]+"/server/api/conc-sub-setup"
+        query = {
+                "transaction_id" : data["transaction_id"],
+                "ammacom_id" : data["ammacom_id"],
+                "merchant_code" : data["merchant_code"],
+                "status" : data["status"],
+                "serial_no" : data["serial"],
+        }
+        print(query)
+        bearer_token = f"Bearer {request.session['access_token']}"
+        headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
+        response = requests.post(url, json=query, headers=headers)
+        return JsonResponse(response.json(), status=201)

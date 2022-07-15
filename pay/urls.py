@@ -8,4 +8,5 @@ urlpatterns = [
 	path('confirm/',views.confirm,name="confirm"),
 	path('checkout/',views.checkout,name="checkout"),
 	path('conclude/',views.conclude,name="conclude"),
+        path('complete/',views.complete,name="complete"),
 ]
