@@ -110,7 +110,8 @@ def confirm(request):
 			"period" : int(request.session["period"]),
 			"email" : request.session["app_data"]["email"],
 			"status_callback": request.session["app_data"]["notify_url"],
-			"e_commerce_redirect": request.session["app_data"]["return_url"]
+			"e_commerce_redirect": request.session["app_data"]["return_url"],
+			"products" : request.session["app_data"]["product_codes"]
 	}
 	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"

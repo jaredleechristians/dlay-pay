@@ -66,6 +66,7 @@ footer{
     bottom: 0;
     position: relative;
     margin-top: 25px;
+    z-index: -1;
 }
 
 .background-image{
@@ -183,7 +184,7 @@ form{
 }
 
 .agree .policy{
-    width: 90%;
+    width: fit-content;
     line-height: 1;
     padding: 5px 10px;
     color: #777777;
@@ -367,6 +368,7 @@ form{
 
 .member{
     text-align: center;
+    z-index: 10;
 }
 
 .member p{
@@ -592,4 +594,14 @@ div#terms, div#agreement{
 object{
 width: 100%;
 height: 100vh;
+}
+
+
+.agree button{
+    background: transparent;
+    border: 0;
+    color: var(--seconday);
+    line-height: 1;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1em;
 }
