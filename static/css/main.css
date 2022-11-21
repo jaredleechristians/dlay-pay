@@ -356,7 +356,7 @@ form{
     width: 100px;
     margin-bottom: -35px;
     position: relative;
-    z-index: 9;
+    z-index: 99;
 }
 
 .alt .form-group{

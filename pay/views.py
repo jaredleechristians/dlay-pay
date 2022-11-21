@@ -7,6 +7,9 @@ from django.shortcuts import redirect
 from .forms import id_form
 import requests
 import json
+import logging
+
+logger = logging.getLogger(__file__)
 
 from django.utils.http import urlencode
 
@@ -121,14 +124,16 @@ def confirm(request):
 		print(request.session["app_data"])
 		return render(request,'pay/confirm.html',context)
 	context = {
-			"description" : f"Error code: {response.status_code}"
+			"description" : f"Error code: {response.status_code}",
+			"reason" :  response.json()["request_description"]
 		}
 	return render(request,'pay/error.html',context)
 
 def checkout(request):
 	print("checkout")
 	context = {
-		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"]
+		"ammacom_id" : request.session["ammacom_validate"]["ammacom_id"],
+		"url" : request.session["url"]
 	}
 	return render(request,'pay/checkout.html',context)
 
@@ -211,6 +216,7 @@ def conclude(request):
                 "merchant_code" : data["merchant_code"],
                 "status" : data["status"],
                 "serial_no" : data["serial"],
+		"additional_serial_no" : data["iccid"]
         }
         print(query)
         bearer_token = f"Bearer {request.session['access_token']}"
