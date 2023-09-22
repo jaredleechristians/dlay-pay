@@ -14,7 +14,7 @@
 		<p>Cell: <span>{{ app_data.mobile }}</span></p>
 		<p>Merchant: <span>{{ app_data.merchant_name }}</span></p>
 		<p>Product value: <span>R {{ app_data.amount|floatformat }}</span></p>
-                <p>Number of instalments: <span>{{ period }}</span></p>
+               {% if not disableperiod %} <p>Number of instalments: <span>{{ period }}</span></p>{% endif %}
                 <p>Repayment date: <span>{{ billing_day }}</span></p>
             </div>
         </div>

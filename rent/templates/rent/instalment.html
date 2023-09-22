@@ -5,7 +5,9 @@
         <div class="form-group">
 	    <div class="row">
 	    <div class="product_image">
+		{% if singleproduct %}
 		<img src="{{ product_image }}">
+		{% endif %}
 	    </div>
             <div class="form member rent-sub">
 		<h3><span class="purple">Please  </span>select your payment date</h3>

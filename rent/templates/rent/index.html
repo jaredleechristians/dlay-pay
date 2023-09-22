@@ -1,5 +1,5 @@
 {% load static %}
-{% include "pay/header.html" with return_url=data.cancel_url %}
+{% include "pay/header.html" with return_url=data.cancel_url merchant_logo=merchant_logo %}
         <div class="content">
             <div class="content-form">
                 <h3 class="name">{{ data.first_name }} {{data.last_name}} <span class="greeting">Let’s Get Started With Your Subscription Application</span> </h3>

@@ -11,6 +11,10 @@
     </head>
     <body>
         <header>
+	{% if merchant_logo %}
+	    <img class="logo" src="{{ merchant_logo }}">
+	{% else %}
             <img class="logo" src="{% static '/images/dlay_logo.svg' %}">
+	{% endif %}
             <a href="{{ return_url }}" class="button">Go back to shop</a>
         </header>

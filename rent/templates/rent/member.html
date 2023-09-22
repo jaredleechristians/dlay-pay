@@ -6,16 +6,20 @@
         <div class="form-group">
 	    <div class="row">
 	    <div class="product_image">
+		{% if singleproduct  %}
 		<img src="{{ product_image }}">
+		{% endif %}
 	    </div> 
             <div class="form member">
 		<img class="success" src="{% static 'images/success.svg' %}">
                 <h1>Oh Yes!</h1>
-                <p>You have been approved for the {{ product_name }}.</p>
+                <p>You have been approved{% if singleproduct %} for the {{ product_name }}{% endif %}.</p>
                 <div class="amounts">
                     <div>
                         <h2><span class="purple">Monthly Fee</span> R {{ monthly_fee }}</h2>
-			<h2><span class="purple">Period</span> {{ request.session.app_data.period }} Months<h2>
+			{% if not disableperiod %}
+				<h2><span class="purple">Period</span> {{ request.session.app_data.period }} Months<h2>
+			{% endif %}
                     </div>
                 </div>
                 <a class="button" onclick="loading()" href="{% url 'rent_instalment' %}">continue</a>

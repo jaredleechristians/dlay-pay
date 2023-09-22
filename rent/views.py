@@ -28,6 +28,17 @@ def index(request):
 			"form" : form,
 			"data" : request.POST
 		}
+		try:
+			crmurl = "https://www.zohoapis.com/crm/v2/functions/getMerchant/actions/execute?auth_type=apikey&zapikey=1003.9a137c567645f853c9e3361d7d1b3dbe.dd31baa7136721cc1bffcdc71361ec75"
+			request_body = {
+				"merchant_code" : request.POST["merchant_code"]
+			}
+			merchant = requests.post(crmurl,json=request_body)
+			print(merchant.json())
+			context["merchant_logo"] = merchant["details"]["output"]["merchantLogo"]
+		except Exception as error:
+			print(error)
+			context["merchant_logo"] = None
 		print(context)
 		return render(request,'rent/index.html', context)
 	else:
@@ -40,13 +51,27 @@ def index(request):
 def member(request):
 	product = json.loads(request.session['app_data']['products'])
 	request.session['product'] = product[0]
+	if(len(product) > 1):
+		single = False
+	else:
+		single = True
+	if request.session['app_data']['disableperiod'] == 'yes':
+		disablepeiod = True
+	else:
+		disablepeiod = False
+	request.session['singleproduct'] = single
+	request.session['disableperiod'] = disablepeiod
 	context = {
+		"singleproduct" : single,
+		"products" : product,
 		"product_name" : product[0]['product_name'],
 		"product_image" : product[0]['product_image'],
 		"data" : request.session['app_data'],
 		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"])),
-		"monthly_fee" : request.session['app_data']['monthly_fee']
+		"monthly_fee" : request.session['app_data']['monthly_fee'],
+		"disableperiod" : disablepeiod
 	}
+	print(context)
 	return render(request,'rent/member.html',context)
 
 def instalment(request):
@@ -61,6 +86,7 @@ def instalment(request):
 
 	url = request.session["url"]+"/server/api/membership-check"
 	query = {
+		"singleproduct" : request.session['singleproduct'],
 		"id_no" : id_no,
 		"full_amount" : float(full_ammount)
 	}
@@ -114,9 +140,8 @@ def confirm(request):
 			"email" : request.session["app_data"]["email"],
 			"status_callback": request.session["app_data"]["notify_url"],
 			"e_commerce_redirect": request.session["app_data"]["return_url"], 
-			"products" : request.session["app_data"]["product_codes"],
+			"products" : request.session["app_data"]["product_codes"]
 	}
-	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
 	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
 	response = requests.post(url, json=query, headers=headers)
@@ -129,10 +154,13 @@ def confirm(request):
 			"ammacom_initiate" : request.session["ammacom_initiate"],
 			"period" : int(request.session["period"]),
 			"billing_day" : request.session["billing_day"],
-			"monthly_fee" : request.session["app_data"]["monthly_fee"]
+			"monthly_fee" : request.session["app_data"]["monthly_fee"],
+			"disableperiod" : request.session["disableperiod"]
 		}
 		print(request.session["app_data"])
 		return render(request,'rent/confirm.html',context)
+	else:
+		print(response.json())
 	context = {
 			"description" : f"Error code: {response.status_code}",
 			"reason" : response.json()["request_description"]

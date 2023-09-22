@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'dlay.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -134,7 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,
+    "disable_existing_loggers": True,
     "root": {"level": "INFO", "handlers": ["file"]},
     "handlers": {
         "file": {
@@ -156,8 +156,8 @@ LOGGING = {
             "format": (
                 u"%(asctime)s [%(levelname)-8s] "
                 "(%(module)s.%(funcName)s) %(message)s"
-            ),
+           ),
             "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
+       },
     },
 }
