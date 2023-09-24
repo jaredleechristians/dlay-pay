@@ -140,8 +140,9 @@ def confirm(request):
 			"email" : request.session["app_data"]["email"],
 			"status_callback": request.session["app_data"]["notify_url"],
 			"e_commerce_redirect": request.session["app_data"]["return_url"], 
-			"products" : request.session["app_data"]["product_codes"]
+			"products" : eval(request.session["app_data"]["product_codes"])
 	}
+	print(query)
 	bearer_token = f"Bearer {request.session['access_token']}"
 	headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
 	response = requests.post(url, json=query, headers=headers)
