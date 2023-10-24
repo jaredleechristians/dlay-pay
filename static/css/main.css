@@ -101,7 +101,7 @@ footer{
 }
 
 .content-form{
-    margin-left: -120px;
+    /*margin-left: -120px;*/
     max-width: 950px;
     width: 100%;
 }
@@ -332,7 +332,7 @@ form{
   }
 
   .alt .content-form{
-    margin-left: -80px;
+    /*margin-left: -80px;*/
     max-width: 950px;
     width: 100%;
 }
@@ -604,4 +604,8 @@ height: 100vh;
     line-height: 1;
     font-family: 'Nunito', sans-serif;
     font-size: 1em;
+}
+
+.merchant_logo_div{
+    text-align: center;
 }

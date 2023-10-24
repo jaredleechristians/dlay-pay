@@ -1,5 +1,5 @@
 {% load static %}
-{% include "pay/header.html" with return_url=request.session.app_data.cancel_url %}
+{% include "rent/header.html" with return_url=request.session.app_data.cancel_url %}
 
 <div class="rent alt content">
     <div class="content-form">
@@ -36,5 +36,5 @@ function loading(){
 	document.getElementById("loading").style.display = "flex";
 }
 </script>
-{% include "pay/footer.html" %}
+{% include "rent/footer.html" %}
 

@@ -25,11 +25,11 @@ class id_form(forms.Form):
 				year = "20"
 			else:
 				year = "19"
-			dob = date(int(year+id[0:2]),int(id[3:4]),int(id[5:6]))
-			print(dob)
+			dob = date(int(year+id[0:2]),int(id[2:4]),int(id[4:6]))
+			#print(dob)
 			now = date.today()
 			age = relativedelta(now, dob).years
-			print(age)
+			#print(age)
 			if age < 18:
 				raise forms.ValidationError("*Invalid Age. You need to be at least 18 years or older to apply.")
 

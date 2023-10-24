@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+#handler404 = 'rent.views.handler404'
+#handler500 = 'rent.views.handler500'
+
 urlpatterns = [
     path('', include('pay.urls')),
     path('rent/', include('rent.urls')),

@@ -16,29 +16,48 @@ from django.utils.http import urlencode
 
 @csrf_exempt
 def index(request):
+	print("load index")
 	if request.method == "POST":
-		form = id_form(request.POST)
-		if form.is_valid():
-			request.session['app_data'] = request.POST
-			request.session['url'] = request.POST["api"]
-			auth(request)
-			return qualify_validate(request)
+		try:
+			print("is post")
+			form = id_form(request.POST)
+			if form.is_valid():
+				print(request.POST)
+				request.session['app_data'] = request.POST
+				request.session['url'] = request.POST["api"]
+				auth(request)
+				return qualify_validate(request)
+		except Exception as e:
+			print(e)
 
 		context = {
 			"form" : form,
 			"data" : request.POST
 		}
+		if "uat" in request.POST["api"]:
+			api_key = "1003.9a137c567645f853c9e3361d7d1b3dbe.dd31baa7136721cc1bffcdc71361ec75"
+		else:
+			api_key = "1003.8e33cc28f65011d95e0407647c8f58bd.ffc3d35e3895d9a16319847fe79eb9a3"
+		print(api_key)
+		print(context['data']['merchant_code'])
 		try:
-			crmurl = "https://www.zohoapis.com/crm/v2/functions/getMerchant/actions/execute?auth_type=apikey&zapikey=1003.9a137c567645f853c9e3361d7d1b3dbe.dd31baa7136721cc1bffcdc71361ec75"
+			crmurl = f"https://www.zohoapis.com/crm/v2/functions/getMerchant/actions/execute?auth_type=apikey&zapikey={api_key}"
+			print(crmurl)
 			request_body = {
-				"merchant_code" : request.POST["merchant_code"]
+				"merchant_code" : context['data']['merchant_code']
 			}
+			print(request_body)
 			merchant = requests.post(crmurl,json=request_body)
 			print(merchant.json())
-			context["merchant_logo"] = merchant["details"]["output"]["merchantLogo"]
+			print(merchant.json()["details"]["output"])
+			output = json.loads((merchant.json()["details"]["output"]))
+			print(output)
+			request.session['merchant_logo'] = output['merchantLogo']
+			context["merchant_logo"] = output['merchantLogo']
 		except Exception as error:
 			print(error)
 			context["merchant_logo"] = None
+			request.session['merchant_logo'] = None
 		print(context)
 		return render(request,'rent/index.html', context)
 	else:
@@ -56,11 +75,11 @@ def member(request):
 	else:
 		single = True
 	if request.session['app_data']['disableperiod'] == 'yes':
-		disablepeiod = True
+		disableperiod = True
 	else:
-		disablepeiod = False
+		disableperiod = False
 	request.session['singleproduct'] = single
-	request.session['disableperiod'] = disablepeiod
+	request.session['disableperiod'] = disableperiod
 	context = {
 		"singleproduct" : single,
 		"products" : product,
@@ -69,7 +88,7 @@ def member(request):
 		"data" : request.session['app_data'],
 		"amount_limit" : "{0:.2f}".format(float(request.session['ammacom_validate']["amount_limit"])),
 		"monthly_fee" : request.session['app_data']['monthly_fee'],
-		"disableperiod" : disablepeiod
+		"disableperiod" : disableperiod
 	}
 	print(context)
 	return render(request,'rent/member.html',context)
@@ -279,3 +298,16 @@ def complete(request):
         headers = {"Authorization": bearer_token, "Content-Type" : "application/json"}
         response = requests.post(url, json=query, headers=headers)
         return JsonResponse(response.json(), status=201)
+
+def handler404(request, *args, **argv):
+    response = render_to_response('rent/404.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request, *args, **argv):
+    response = render_to_response('rent/500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
