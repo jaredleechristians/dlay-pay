@@ -1,11 +1,43 @@
 {% load static %}
 {% include "rent/header.html" with return_url=request.session.app_data.cancel_url %}
 
-<div class="rent alt content">
+<div class="rent alt content rent-member">
     <div class="content-form">
         <div class="form-group">
-	    <div class="row">
-	    <div class="product_image">
+	    <div class="row member-cart">
+          <div class="member-cart-products">
+            <h2>Shopping Cart</h2>
+            <div class="member-cart-products-table">
+              {% for x in products %}
+              <div class="member-cart-products-row">
+                <div class="product-image"><img src="{{ x.product_image }}"></div>
+                <span class="product-name">{{ x.product_name }}</span>
+                <span class="product-price">R {{x.monthly_fee}} <small> p/m </small></span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="member-cart-summary">
+            <h2>Cart Summary</h2>
+            <div class="summary-grid">
+              <div>
+                <span class="cart-summary-title">Total:</span>
+                <span class="cart-summary-subtitle">({{items}} items)</span>
+              </div>
+              <div class="cart-summary-amount">
+                R {{data.amount}}
+              </div>
+              <div>
+                <span class="cart-summary-title">Installment:</span>
+                <span class="cart-summary-subtitle">({{data.period}} months)</span>
+              </div>
+              <div class="cart-summary-amount">
+                R {{monthly_fee}}<small> p/m </small>
+              </div>
+            </div>
+            <a class="button" onclick="loading()" href="{% url 'rent_instalment' %}">continue</a>
+          </div>
+	    <!--<div class="product_image">
 		{% if singleproduct  %}
 		<img src="{{ product_image }}">
 		{% endif %}
@@ -21,8 +53,8 @@
 				<h2><span class="purple">Period</span> {{ request.session.app_data.period }} Months<h2>
 			{% endif %}
                     </div>
-                </div>
-                <a class="button" onclick="loading()" href="{% url 'rent_instalment' %}">continue</a>
+                </div>-->
+                
             </div>
 	    </div>
         </div>

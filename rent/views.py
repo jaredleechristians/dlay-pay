@@ -83,6 +83,7 @@ def member(request):
 	context = {
 		"singleproduct" : single,
 		"products" : product,
+		"items" : len(product),
 		"product_name" : product[0]['product_name'],
 		"product_image" : product[0]['product_image'],
 		"data" : request.session['app_data'],
